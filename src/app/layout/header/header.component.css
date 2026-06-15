@@ -1,0 +1,12 @@
+.header{
+  height:60px;
+  background:#1976d2;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  box-sizing:border-box;
+}
+.logo{ font-weight:600; }
+.nav a{ color:#fff; margin-left:12px; text-decoration:none; }
