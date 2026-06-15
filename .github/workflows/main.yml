@@ -1,9 +1,14 @@
-name: CI
+name: Deploy Angular
 
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -14,9 +19,26 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: npm
+          node-version: 20
 
-      - run: npm ci
+      - run: npm install
 
       - run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/demo-frontend/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - uses: actions/deploy-pages@v4
