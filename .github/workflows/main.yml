@@ -23,7 +23,27 @@ jobs:
 
       - run: npm ci
 
-      - run: npx -y @angular/cli@19.2.13 build --base-href=/demo-frontend/
+      - name: Debug: show Node and npm versions
+        run: |
+          node -v
+          npm -v
+
+      - name: Debug: list project files
+        run: |
+          pwd
+          ls -la
+
+      - name: Debug: check node_modules for angular devkit
+        run: |
+          ls -la node_modules/@angular-devkit || true
+          npm ls @angular-devkit/build-angular --depth=0 || true
+
+      - name: Debug: npx angular cli version
+        run: |
+          npx -y @angular/cli@19.2.13 --version || true
+
+      - name: Run angular build via npx
+        run: npx -y @angular/cli@19.2.13 build --base-href=/demo-frontend/
 
       - uses: actions/upload-pages-artifact@v3
         with:
