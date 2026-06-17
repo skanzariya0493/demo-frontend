@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href=/demo-frontend/",
+    "build": "npx -y @angular/cli@19.2.13 build --base-href=/demo-frontend/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
