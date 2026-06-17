@@ -15,27 +15,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Check Angular CLI
+      - name: Verify Angular CLI
         run: npx ng version
 
-      - name: Build Angular
+      - name: Build Angular App
         run: npx ng build --configuration production --base-href=/demo-frontend/
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload Artifact
+      - name: Upload Build Files
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist/demo-frontend/browser
@@ -53,5 +54,5 @@ jobs:
       id-token: write
 
     steps:
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
