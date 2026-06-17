@@ -23,7 +23,7 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build
+      - run: npx -y @angular/cli@19.2.13 build --base-href=/demo-frontend/
 
       - uses: actions/upload-pages-artifact@v3
         with:
