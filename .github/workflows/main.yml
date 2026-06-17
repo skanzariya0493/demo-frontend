@@ -21,7 +21,18 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        env:
+          NPM_CONFIG_PRODUCTION: 'false'
+        run: npm ci
 
       - name: Debug: show Node and npm versions
         run: |
@@ -42,8 +53,17 @@ jobs:
         run: |
           npx -y @angular/cli@19.2.13 --version || true
 
-      - name: Run angular build via npx
-        run: npx -y @angular/cli@19.2.13 build --base-href=/demo-frontend/
+      - name: Ensure Angular builder present
+        run: |
+          if ! npm ls @angular-devkit/build-angular --depth=0 >/dev/null 2>&1; then
+            echo "@angular-devkit/build-angular not found — installing explicitly (no-save)"
+            npm install @angular-devkit/build-angular@^19.2.13 @angular/cli@^19.2.13 --no-save
+          else
+            echo "@angular-devkit/build-angular present"
+          fi
+
+      - name: Run npm build
+        run: npm run build --if-present
 
       - uses: actions/upload-pages-artifact@v3
         with:
