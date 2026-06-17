@@ -1,4 +1,4 @@
-name: Deploy Angular
+name: Deploy Angular to GitHub Pages
 
 on:
   push:
@@ -10,55 +10,51 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-      - name: Debug: show Node and npm versions
-        run: |
-          node -v
-          npm -v
+      - name: Build Angular App
+        run: npm run build
 
-      - name: Debug: list project files
-        run: |
-          pwd
-          ls -la
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
-      - name: Debug: check node_modules for angular devkit
-        run: |
-          ls -la node_modules/@angular-devkit || true
-          npm ls @angular-devkit/build-angular --depth=0 || true
-
-      - name: Debug: npx angular cli version
-        run: |
-          npx -y @angular/cli@19.2.13 --version || true
-
-      - name: Run angular build via npx
-        run: npx -y @angular/cli@19.2.13 build --base-href=/demo-frontend/
-
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload Build Artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist/demo-frontend/browser
 
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
     environment:
       name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    needs: build
 
     permissions:
       pages: write
       id-token: write
 
     steps:
-      - uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
