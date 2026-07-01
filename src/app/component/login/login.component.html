@@ -28,8 +28,11 @@
     />
     <small *ngIf="password.invalid && password.touched">Password must be at least 6 characters.</small>
 
-    <button type="submit" [disabled]="loginForm.invalid">Login</button>
+    <button type="submit" [disabled]="loginForm.invalid || loading">
+      {{ loading ? 'Logging in...' : 'Login' }}
+    </button>
 
     <p class="success" *ngIf="submitted">Login form submitted successfully.</p>
+    <small *ngIf="errorMessage">{{ errorMessage }}</small>
   </form>
 </section>
