@@ -1,0 +1,35 @@
+<section class="auth-page">
+  <form class="auth-form" #loginForm="ngForm" (ngSubmit)="onLogin()">
+    <h1>Login</h1>
+
+    <label for="loginEmail">Email</label>
+    <input
+      id="loginEmail"
+      name="email"
+      type="email"
+      placeholder="Enter your email"
+      required
+      email
+      [(ngModel)]="loginData.email"
+      #email="ngModel"
+    />
+    <small *ngIf="email.invalid && email.touched">Please enter a valid email.</small>
+
+    <label for="loginPassword">Password</label>
+    <input
+      id="loginPassword"
+      name="password"
+      type="password"
+      placeholder="Enter your password"
+      required
+      minlength="6"
+      [(ngModel)]="loginData.password"
+      #password="ngModel"
+    />
+    <small *ngIf="password.invalid && password.touched">Password must be at least 6 characters.</small>
+
+    <button type="submit" [disabled]="loginForm.invalid">Login</button>
+
+    <p class="success" *ngIf="submitted">Login form submitted successfully.</p>
+  </form>
+</section>
