@@ -1,0 +1,60 @@
+<section class="auth-page">
+  <form class="auth-form" #registerForm="ngForm" (ngSubmit)="onRegister()">
+    <h1>Registration</h1>
+
+    <label for="fullName">Full Name</label>
+    <input
+      id="fullName"
+      name="fullName"
+      type="text"
+      placeholder="Enter your full name"
+      required
+      [(ngModel)]="registerData.fullName"
+      #fullName="ngModel"
+    />
+    <small *ngIf="fullName.invalid && fullName.touched">Full name is required.</small>
+
+    <label for="registerEmail">Email</label>
+    <input
+      id="registerEmail"
+      name="email"
+      type="email"
+      placeholder="Enter your email"
+      required
+      email
+      [(ngModel)]="registerData.email"
+      #email="ngModel"
+    />
+    <small *ngIf="email.invalid && email.touched">Please enter a valid email.</small>
+
+    <label for="registerPassword">Password</label>
+    <input
+      id="registerPassword"
+      name="password"
+      type="password"
+      placeholder="Create a password"
+      required
+      minlength="6"
+      [(ngModel)]="registerData.password"
+      #password="ngModel"
+    />
+    <small *ngIf="password.invalid && password.touched">Password must be at least 6 characters.</small>
+
+    <label for="confirmPassword">Confirm Password</label>
+    <input
+      id="confirmPassword"
+      name="confirmPassword"
+      type="password"
+      placeholder="Confirm your password"
+      required
+      [(ngModel)]="registerData.confirmPassword"
+      #confirmPassword="ngModel"
+    />
+    <small *ngIf="confirmPassword.invalid && confirmPassword.touched">Please confirm your password.</small>
+    <small *ngIf="passwordsDoNotMatch">Passwords do not match.</small>
+
+    <button type="submit" [disabled]="registerForm.invalid || passwordsDoNotMatch">Register</button>
+
+    <p class="success" *ngIf="submitted">Registration form submitted successfully.</p>
+  </form>
+</section>
